@@ -108,8 +108,7 @@ PaError PaUtil_DeviceIndexToHostApiDeviceIndex(
  valid after the call to PaUtil_SetLastHostErrorInfo() returns.
 
 */
-void PaUtil_SetLastHostErrorInfo( PaHostApiTypeId hostApiType, long errorCode,
-        const char *errorText );
+void PaUtil_SetLastHostErrorInfo( PaHostApiTypeId hostApiType, int errorCode,const char *errorText );
 
 
         
@@ -118,7 +117,7 @@ void PaUtil_SetLastHostErrorInfo( PaHostApiTypeId hostApiType, long errorCode,
 */
 
 /** Allocate size bytes, guaranteed to be aligned to a FIXME byte boundary */
-void *PaUtil_AllocateMemory( long size );
+void *PaUtil_AllocateMemory( size_t size );
 
 
 /** Realease block if non-NULL. block may be NULL */

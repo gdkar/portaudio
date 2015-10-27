@@ -79,7 +79,6 @@ of a device for the duration of active stream using those devices
 #include "pa_process.h"
 #include "portaudio.h"
 #include "pa_debugprint.h"
-#include "pa_memorybarrier.h"
 #include "pa_ringbuffer.h"
 #include "pa_trace.h"
 #include "pa_win_waveformat.h"
@@ -671,12 +670,12 @@ static void MemoryBarrierDummy(void)
 
 static void MemoryBarrierRead(void)
 {
-    PaUtil_ReadMemoryBarrier();
+    atomic_thread_fence(memory_order_acquire);
 }
 
 static void MemoryBarrierWrite(void)
 {
-    PaUtil_WriteMemoryBarrier();
+    atomic_thread_fence(memory_order_release);
 }
 
 static unsigned long GetWfexSize(const WAVEFORMATEX* wfex)

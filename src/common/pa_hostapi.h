@@ -167,7 +167,7 @@ extern "C"
 typedef struct PaUtilPrivatePaFrontHostApiInfo {
 
 
-    unsigned long baseDeviceIndex;
+    size_t baseDeviceIndex;
 }PaUtilPrivatePaFrontHostApiInfo;
 
 
@@ -181,9 +181,9 @@ typedef struct PaUtilPrivatePaFrontHostApiInfo {
 */
 typedef struct PaUtilHostApiSpecificStreamInfoHeader
 {
-    unsigned long size;             /**< size of whole structure including this header */
+    size_t size;             /**< size of whole structure including this header */
     PaHostApiTypeId hostApiType;    /**< host API for which this data is intended */
-    unsigned long version;          /**< structure version */
+    int version;          /**< structure version */
 } PaUtilHostApiSpecificStreamInfoHeader;
 
 
@@ -312,7 +312,7 @@ typedef struct PaUtilHostApiRepresentation {
                            const PaStreamParameters *inputParameters,
                            const PaStreamParameters *outputParameters,
                            double sampleRate,
-                           unsigned long framesPerCallback,
+                           size_t framesPerCallback,
                            PaStreamFlags streamFlags,
                            PaStreamCallback *streamCallback,
                            void *userData );

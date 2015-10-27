@@ -46,8 +46,8 @@
 
 #include "pa_cpuload.h"
 #include <assert.h>
-#include <pthread.h>
 #include <signal.h>
+#include <pthread.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -190,8 +190,7 @@ PaError PaUnixThreading_Initialize();
  * @param rtSched: Enable realtime scheduling?
  * @return: If timed out waiting on child, paTimedOut.
  */
-PaError PaUnixThread_New( PaUnixThread* self, void* (*threadFunc)( void* ), void* threadArg, PaTime waitForChild,
-        int rtSched );
+PaError PaUnixThread_New( PaUnixThread* self, void* (*threadFunc)( void* ), void* threadArg, PaTime waitForChild,int rtSched );
 
 /** Terminate thread.
  *

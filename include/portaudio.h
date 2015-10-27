@@ -49,6 +49,8 @@
 extern "C"
 {
 #endif /* __cplusplus */
+#include <stddef.h>
+#include <stdint.h>
 
 /** Retrieve the release number of the currently running PortAudio build.
  * For example, for version "19.5.1" this will return 0x00130501.
@@ -464,7 +466,7 @@ typedef double PaTime;
  @see paFloat32, paInt16, paInt32, paInt24, paInt8
  @see paUInt8, paCustomFormat, paNonInterleaved
 */
-typedef unsigned long PaSampleFormat;
+typedef size_t PaSampleFormat;
 
 
 #define paFloat32        ((PaSampleFormat) 0x00000001) /**< @see PaSampleFormat */
@@ -633,7 +635,7 @@ typedef void PaStream;
  @see paNoFlag, paClipOff, paDitherOff, paNeverDropInput,
   paPrimeOutputBuffersUsingStreamCallback, paPlatformSpecificFlags
 */
-typedef unsigned long PaStreamFlags;
+typedef size_t PaStreamFlags;
 
 /** @see PaStreamFlags */
 #define   paNoFlag          ((PaStreamFlags) 0)
@@ -692,7 +694,7 @@ typedef struct PaStreamCallbackTimeInfo{
  @see paInputUnderflow, paInputOverflow, paOutputUnderflow, paOutputOverflow,
  paPrimingOutput
 */
-typedef unsigned long PaStreamCallbackFlags;
+typedef size_t PaStreamCallbackFlags;
 
 /** In a stream opened with paFramesPerBufferUnspecified, indicates that
  input data is all silence (zeros) because no real data is available. In a
@@ -812,7 +814,7 @@ typedef enum PaStreamCallbackResult
 */
 typedef int PaStreamCallback(
     const void *input, void *output,
-    unsigned long frameCount,
+    size_t frameCount,
     const PaStreamCallbackTimeInfo* timeInfo,
     PaStreamCallbackFlags statusFlags,
     void *userData );
@@ -876,7 +878,7 @@ PaError Pa_OpenStream( PaStream** stream,
                        const PaStreamParameters *inputParameters,
                        const PaStreamParameters *outputParameters,
                        double sampleRate,
-                       unsigned long framesPerBuffer,
+                       size_t framesPerBuffer,
                        PaStreamFlags streamFlags,
                        PaStreamCallback *streamCallback,
                        void *userData );
@@ -917,7 +919,7 @@ PaError Pa_OpenDefaultStream( PaStream** stream,
                               int numOutputChannels,
                               PaSampleFormat sampleFormat,
                               double sampleRate,
-                              unsigned long framesPerBuffer,
+                              size_t framesPerBuffer,
                               PaStreamCallback *streamCallback,
                               void *userData );
 
@@ -1128,7 +1130,7 @@ double Pa_GetStreamCpuLoad( PaStream* stream );
 */
 PaError Pa_ReadStream( PaStream* stream,
                        void *buffer,
-                       unsigned long frames );
+                       size_t frames );
 
 
 /** Write samples to an output stream. This function doesn't return until the
@@ -1155,7 +1157,7 @@ PaError Pa_ReadStream( PaStream* stream,
 */
 PaError Pa_WriteStream( PaStream* stream,
                         const void *buffer,
-                        unsigned long frames );
+                        size_t frames );
 
 
 /** Retrieve the number of frames that can be read from the stream without
@@ -1166,7 +1168,7 @@ PaError Pa_WriteStream( PaStream* stream,
  PaErrorCode (which are always negative) if PortAudio is not initialized or an
  error is encountered.
 */
-signed long Pa_GetStreamReadAvailable( PaStream* stream );
+ptrdiff_t Pa_GetStreamReadAvailable( PaStream* stream );
 
 
 /** Retrieve the number of frames that can be written to the stream without
@@ -1177,7 +1179,7 @@ signed long Pa_GetStreamReadAvailable( PaStream* stream );
  PaErrorCode (which are always negative) if PortAudio is not initialized or an
  error is encountered.
 */
-signed long Pa_GetStreamWriteAvailable( PaStream* stream );
+ptrdiff_t Pa_GetStreamWriteAvailable( PaStream* stream );
 
 
 /* Miscellaneous utilities */

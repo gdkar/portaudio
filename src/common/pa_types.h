@@ -52,43 +52,32 @@
  A PA_VALIDATE_SIZES macro is provided to assert that the values set in this
  file are correct.
 */
+#include <stdint.h>
+#include <stddef.h>
 
 #ifndef SIZEOF_SHORT
-#define SIZEOF_SHORT 2
+#define SIZEOF_SHORT (sizeof(short))
 #endif
 
 #ifndef SIZEOF_INT
-#define SIZEOF_INT 4
+#define SIZEOF_INT (sizeof(int))
 #endif
 
 #ifndef SIZEOF_LONG
-#define SIZEOF_LONG 4
+#define SIZEOF_LONG (sizeof(long))
 #endif
 
+typedef int8_t   PaInt8;
+typedef uint8_t  PaUint8;
 
-#if SIZEOF_SHORT == 2
-typedef signed short PaInt16;
-typedef unsigned short PaUint16;
-#elif SIZEOF_INT == 2
-typedef signed int PaInt16;
-typedef unsigned int PaUint16;
-#else
-#error pa_types.h was unable to determine which type to use for 16bit integers on the target platform
-#endif
+typedef int16_t  PaInt16;
+typedef uint16_t PaUint16;
 
-#if SIZEOF_SHORT == 4
-typedef signed short PaInt32;
-typedef unsigned short PaUint32;
-#elif SIZEOF_INT == 4
-typedef signed int PaInt32;
-typedef unsigned int PaUint32;
-#elif SIZEOF_LONG == 4
-typedef signed long PaInt32;
-typedef unsigned long PaUint32;
-#else
-#error pa_types.h was unable to determine which type to use for 32bit integers on the target platform
-#endif
+typedef int32_t  PaInt32;
+typedef uint32_t PaUint32;
 
+typedef int64_t  PaInt64;
+typedef uint64_t PaUint64;
 
 /* PA_VALIDATE_TYPE_SIZES compares the size of the integer types at runtime to
  ensure that PortAudio was configured correctly, and raises an assertion if

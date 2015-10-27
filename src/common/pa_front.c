@@ -142,8 +142,7 @@ static char lastHostErrorText_[ PA_LAST_HOST_ERROR_TEXT_LENGTH_ + 1 ] = {0};
 static PaHostErrorInfo lastHostErrorInfo_ = { (PaHostApiTypeId)-1, 0, lastHostErrorText_ };
 
 
-void PaUtil_SetLastHostErrorInfo( PaHostApiTypeId hostApiType, long errorCode,
-        const char *errorText )
+void PaUtil_SetLastHostErrorInfo( PaHostApiTypeId hostApiType, int errorCode,const char *errorText )
 {
     lastHostErrorInfo_.hostApiType = hostApiType;
     lastHostErrorInfo_.errorCode = errorCode;
@@ -875,7 +874,7 @@ static PaError ValidateOpenStreamParameters(
     const PaStreamParameters *inputParameters,
     const PaStreamParameters *outputParameters,
     double sampleRate,
-    unsigned long framesPerBuffer,
+    size_t framesPerBuffer,
     PaStreamFlags streamFlags,
     PaStreamCallback *streamCallback,
     PaUtilHostApiRepresentation **hostApi,
@@ -1137,7 +1136,7 @@ PaError Pa_OpenStream( PaStream** stream,
                        const PaStreamParameters *inputParameters,
                        const PaStreamParameters *outputParameters,
                        double sampleRate,
-                       unsigned long framesPerBuffer,
+                       size_t framesPerBuffer,
                        PaStreamFlags streamFlags,
                        PaStreamCallback *streamCallback,
                        void *userData )
@@ -1176,7 +1175,7 @@ PaError Pa_OpenStream( PaStream** stream,
     }
     
     PA_LOGAPI(("\tdouble sampleRate: %g\n", sampleRate ));
-    PA_LOGAPI(("\tunsigned long framesPerBuffer: %d\n", framesPerBuffer ));
+    PA_LOGAPI(("\tsize_t framesPerBuffer: %d\n", framesPerBuffer ));
     PA_LOGAPI(("\tPaStreamFlags streamFlags: 0x%x\n", streamFlags ));
     PA_LOGAPI(("\tPaStreamCallback *streamCallback: 0x%p\n", streamCallback ));
     PA_LOGAPI(("\tvoid *userData: 0x%p\n", userData ));
@@ -1272,7 +1271,7 @@ PaError Pa_OpenDefaultStream( PaStream** stream,
                               int outputChannelCount,
                               PaSampleFormat sampleFormat,
                               double sampleRate,
-                              unsigned long framesPerBuffer,
+                              size_t framesPerBuffer,
                               PaStreamCallback *streamCallback,
                               void *userData )
 {
@@ -1286,7 +1285,7 @@ PaError Pa_OpenDefaultStream( PaStream** stream,
     PA_LOGAPI(("\tint outputChannelCount: %d\n", outputChannelCount ));
     PA_LOGAPI(("\tPaSampleFormat sampleFormat: %d\n", sampleFormat ));
     PA_LOGAPI(("\tdouble sampleRate: %g\n", sampleRate ));
-    PA_LOGAPI(("\tunsigned long framesPerBuffer: %d\n", framesPerBuffer ));
+    PA_LOGAPI(("\tsize_t framesPerBuffer: %d\n", framesPerBuffer ));
     PA_LOGAPI(("\tPaStreamCallback *streamCallback: 0x%p\n", streamCallback ));
     PA_LOGAPI(("\tvoid *userData: 0x%p\n", userData ));
 
@@ -1632,9 +1631,7 @@ double Pa_GetStreamCpuLoad( PaStream* stream )
 }
 
 
-PaError Pa_ReadStream( PaStream* stream,
-                       void *buffer,
-                       unsigned long frames )
+PaError Pa_ReadStream( PaStream* stream,void *buffer,size_t frames )
 {
     PaError result = PaUtil_ValidateStreamPointer( stream );
 
@@ -1672,9 +1669,7 @@ PaError Pa_ReadStream( PaStream* stream,
 }
 
 
-PaError Pa_WriteStream( PaStream* stream,
-                        const void *buffer,
-                        unsigned long frames )
+PaError Pa_WriteStream( PaStream* stream,const void *buffer,size_t frames )
 {
     PaError result = PaUtil_ValidateStreamPointer( stream );
 
@@ -1711,10 +1706,10 @@ PaError Pa_WriteStream( PaStream* stream,
     return result;
 }
 
-signed long Pa_GetStreamReadAvailable( PaStream* stream )
+ptrdiff_t Pa_GetStreamReadAvailable( PaStream* stream )
 {
     PaError error = PaUtil_ValidateStreamPointer( stream );
-    signed long result;
+    ptrdiff_t result;
 
     PA_LOGAPI_ENTER_PARAMS( "Pa_GetStreamReadAvailable" );
     PA_LOGAPI(("\tPaStream* stream: 0x%p\n", stream ));
@@ -1724,7 +1719,7 @@ signed long Pa_GetStreamReadAvailable( PaStream* stream )
         result = 0;
 
         PA_LOGAPI(("Pa_GetStreamReadAvailable returned:\n" ));
-        PA_LOGAPI(("\tunsigned long: 0 [ PaError error: %d ( %s ) ]\n", error, Pa_GetErrorText( error ) ));
+        PA_LOGAPI(("\tsize_t : 0 [ PaError error: %d ( %s ) ]\n", error, Pa_GetErrorText( error ) ));
 
     }
     else
@@ -1740,10 +1735,10 @@ signed long Pa_GetStreamReadAvailable( PaStream* stream )
 }
 
 
-signed long Pa_GetStreamWriteAvailable( PaStream* stream )
+ptrdiff_t Pa_GetStreamWriteAvailable( PaStream* stream )
 {
     PaError error = PaUtil_ValidateStreamPointer( stream );
-    signed long result;
+    ptrdiff_t result;
 
     PA_LOGAPI_ENTER_PARAMS( "Pa_GetStreamWriteAvailable" );
     PA_LOGAPI(("\tPaStream* stream: 0x%p\n", stream ));
@@ -1753,7 +1748,7 @@ signed long Pa_GetStreamWriteAvailable( PaStream* stream )
         result = 0;
 
         PA_LOGAPI(("Pa_GetStreamWriteAvailable returned:\n" ));
-        PA_LOGAPI(("\tunsigned long: 0 [ PaError error: %d ( %s ) ]\n", error, Pa_GetErrorText( error ) ));
+        PA_LOGAPI(("\tsize_t : 0 [ PaError error: %d ( %s ) ]\n", error, Pa_GetErrorText( error ) ));
 
     }
     else

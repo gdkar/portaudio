@@ -70,18 +70,10 @@
  If you want to call them then you will need to add pa_ringbuffer.c to your application source code.
 */
 
-#if defined(__APPLE__)
-#include <sys/types.h>
-typedef int32_t ring_buffer_size_t;
-#elif defined( __GNUC__ )
-typedef long ring_buffer_size_t;
-#elif (_MSC_VER >= 1400)
-typedef long ring_buffer_size_t;
-#elif defined(_MSC_VER) || defined(__BORLANDC__)
-typedef long ring_buffer_size_t;
-#else
-typedef long ring_buffer_size_t;
-#endif
+#include <stdint.h>
+#include <stddef.h>
+
+typedef intptr_t ring_buffer_size_t;
 
 
 
@@ -93,8 +85,8 @@ extern "C"
 typedef struct PaUtilRingBuffer
 {
     ring_buffer_size_t  bufferSize; /**< Number of elements in FIFO. Power of 2. Set by PaUtil_InitRingBuffer. */
-    volatile ring_buffer_size_t  writeIndex; /**< Index of next writable element. Set by PaUtil_AdvanceRingBufferWriteIndex. */
-    volatile ring_buffer_size_t  readIndex;  /**< Index of next readable element. Set by PaUtil_AdvanceRingBufferReadIndex. */
+    _Atomic(ring_buffer_size_t)  writeIndex; /**< Index of next writable element. Set by PaUtil_AdvanceRingBufferWriteIndex. */
+    _Atomic(ring_buffer_size_t)  readIndex;  /**< Index of next readable element. Set by PaUtil_AdvanceRingBufferReadIndex. */
     ring_buffer_size_t  bigMask;    /**< Used for wrapping indices with extra bit to distinguish full/empty. */
     ring_buffer_size_t  smallMask;  /**< Used for fitting indices to buffer. */
     ring_buffer_size_t  elementSizeBytes; /**< Number of bytes per element. */

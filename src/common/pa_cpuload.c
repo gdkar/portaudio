@@ -76,7 +76,7 @@ void PaUtil_BeginCpuLoadMeasurement( PaUtilCpuLoadMeasurer* measurer )
 }
 
 
-void PaUtil_EndCpuLoadMeasurement( PaUtilCpuLoadMeasurer* measurer, unsigned long framesProcessed )
+void PaUtil_EndCpuLoadMeasurement( PaUtilCpuLoadMeasurer* measurer, size_t framesProcessed )
 {
     double measurementEndTime, secondsFor100Percent, measuredLoad;
 

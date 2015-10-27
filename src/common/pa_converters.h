@@ -88,8 +88,8 @@ PaSampleFormat PaUtil_SelectClosestAvailableFormat(
     NULL or invalid dither state may be passed.
 */
 typedef void PaUtilConverter(
-    void *destinationBuffer, signed int destinationStride,
-    void *sourceBuffer, signed int sourceStride,
+    void *destinationBuffer, int destinationStride,
+    void *sourceBuffer, int sourceStride,
     unsigned int count, struct PaUtilTriangularDitherGenerator *ditherGenerator );
 
 
@@ -116,8 +116,7 @@ PaUtilConverter* PaUtil_SelectConverter( PaSampleFormat sourceFormat,
     expressed in samples (not bytes.) It may be negative.
     @param count The number of samples to zero.
 */
-typedef void PaUtilZeroer(
-    void *destinationBuffer, signed int destinationStride, unsigned int count );
+typedef void PaUtilZeroer( void *destinationBuffer, int destinationStride, unsigned int count );
 
     
 /** Find a buffer zeroer function for the given destination format.

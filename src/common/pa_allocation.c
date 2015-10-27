@@ -72,7 +72,7 @@ struct PaUtilAllocationGroupLink
     links will have NULL buffer members, and each link will point to
     the next link except the last, which will point to <nextSpare>
 */
-static struct PaUtilAllocationGroupLink *AllocateLinks( long count,
+static struct PaUtilAllocationGroupLink *AllocateLinks( ptrdiff_t count,
         struct PaUtilAllocationGroupLink *nextBlock,
         struct PaUtilAllocationGroupLink *nextSpare )
 {
@@ -143,7 +143,7 @@ void PaUtil_DestroyAllocationGroup( PaUtilAllocationGroup* group )
 }
 
 
-void* PaUtil_GroupAllocateMemory( PaUtilAllocationGroup* group, long size )
+void* PaUtil_GroupAllocateMemory( PaUtilAllocationGroup* group, ptrdiff_t size )
 {
     struct PaUtilAllocationGroupLink *links, *link;
     void *result = 0;

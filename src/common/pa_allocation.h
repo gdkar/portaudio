@@ -60,11 +60,12 @@
 extern "C"
 {
 #endif /* __cplusplus */
-
+#include <stddef.h>
+#include <stdint.h>
 
 typedef struct
 {
-    long linkCount;
+    ptrdiff_t linkCount;
     struct PaUtilAllocationGroupLink *linkBlocks;
     struct PaUtilAllocationGroupLink *spareLinks;
     struct PaUtilAllocationGroupLink *allocations;
@@ -82,7 +83,7 @@ void PaUtil_DestroyAllocationGroup( PaUtilAllocationGroup* group );
 
 /** Allocate a block of memory though an allocation group.
 */
-void* PaUtil_GroupAllocateMemory( PaUtilAllocationGroup* group, long size );
+void* PaUtil_GroupAllocateMemory( PaUtilAllocationGroup* group, ptrdiff_t size );
 
 /** Free a block of memory that was previously allocated though an allocation
  group. Calling this function is a relatively time consuming operation.

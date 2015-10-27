@@ -53,11 +53,7 @@
 extern "C"
 {
 #endif /* __cplusplus */
-
-
 #define PA_STREAM_MAGIC (0x18273645)
-
-
 /** A structure representing an (abstract) interface to a host API. Contains
  pointers to functions which implement the interface.
 
@@ -73,12 +69,11 @@ typedef struct {
     PaError (*IsActive)( PaStream *stream );
     PaTime (*GetTime)( PaStream *stream );
     double (*GetCpuLoad)( PaStream* stream );
-    PaError (*Read)( PaStream* stream, void *buffer, unsigned long frames );
-    PaError (*Write)( PaStream* stream, const void *buffer, unsigned long frames );
-    signed long (*GetReadAvailable)( PaStream* stream );
-    signed long (*GetWriteAvailable)( PaStream* stream );
+    PaError (*Read)( PaStream* stream, void *buffer, size_t frames );
+    PaError (*Write)( PaStream* stream, const void *buffer, size_t frames );
+    ptrdiff_t (*GetReadAvailable)( PaStream* stream );
+    ptrdiff_t  (*GetWriteAvailable)( PaStream* stream );
 } PaUtilStreamInterface;
-
 
 /** Initialize the fields of a PaUtilStreamInterface structure.
 */
@@ -91,21 +86,17 @@ void PaUtil_InitializeStreamInterface( PaUtilStreamInterface *streamInterface,
     PaError (*IsActive)( PaStream* ),
     PaTime (*GetTime)( PaStream* ),
     double (*GetCpuLoad)( PaStream* ),
-    PaError (*Read)( PaStream* stream, void *buffer, unsigned long frames ),
-    PaError (*Write)( PaStream* stream, const void *buffer, unsigned long frames ),
-    signed long (*GetReadAvailable)( PaStream* stream ),
-    signed long (*GetWriteAvailable)( PaStream* stream ) );
-
+    PaError (*Read)( PaStream* stream, void *buffer, size_t frames ),
+    PaError (*Write)( PaStream* stream, const void *buffer, size_t frames ),
+    ptrdiff_t (*GetReadAvailable)( PaStream* stream ),
+    ptrdiff_t  (*GetWriteAvailable)( PaStream* stream ) );
 
 /** Dummy Read function for use in interfaces to a callback based streams.
  Pass to the Read parameter of PaUtil_InitializeStreamInterface.
  @return An error code indicating that the function has no effect
  because the stream is a callback stream.
 */
-PaError PaUtil_DummyRead( PaStream* stream,
-                       void *buffer,
-                       unsigned long frames );
-
+PaError PaUtil_DummyRead( PaStream* stream,void *buffer, size_t frames );
 
 /** Dummy Write function for use in an interfaces to callback based streams.
  Pass to the Write parameter of PaUtil_InitializeStreamInterface.
@@ -114,7 +105,7 @@ PaError PaUtil_DummyRead( PaStream* stream,
 */
 PaError PaUtil_DummyWrite( PaStream* stream,
                        const void *buffer,
-                       unsigned long frames );
+                       size_t frames );
 
 
 /** Dummy GetReadAvailable function for use in interfaces to callback based
@@ -122,7 +113,7 @@ PaError PaUtil_DummyWrite( PaStream* stream,
  @return An error code indicating that the function has no effect
  because the stream is a callback stream.
 */
-signed long PaUtil_DummyGetReadAvailable( PaStream* stream );
+ptrdiff_t PaUtil_DummyGetReadAvailable( PaStream* stream );
 
 
 /** Dummy GetWriteAvailable function for use in interfaces to callback based
@@ -130,7 +121,7 @@ signed long PaUtil_DummyGetReadAvailable( PaStream* stream );
  @return An error code indicating that the function has no effect
  because the stream is a callback stream.
 */
-signed long PaUtil_DummyGetWriteAvailable( PaStream* stream );
+ptrdiff_t  PaUtil_DummyGetWriteAvailable( PaStream* stream );
 
 
 
@@ -145,7 +136,7 @@ double PaUtil_DummyGetCpuLoad( PaStream* stream );
  forward to the appropriate functions in the streamInterface structure.
 */
 typedef struct PaUtilStreamRepresentation {
-    unsigned long magic;    /**< set to PA_STREAM_MAGIC */
+    size_t magic;    /**< set to PA_STREAM_MAGIC */
     struct PaUtilStreamRepresentation *nextOpenStream; /**< field used by multi-api code */
     PaUtilStreamInterface *streamInterface;
     PaStreamCallback *streamCallback;
