@@ -1,0 +1,14 @@
+*.o
+*.lo
+*.la
+*.log
+*.pc
+bin
+bin-stamp
+lib-stamp
+libtool
+.libs
+.deps
+config.status
+config.guess
+Makefile
